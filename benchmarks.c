@@ -21,7 +21,7 @@ double accuracy(double (*func)(double))
 {
     double w = -1;
     double start = 0;
-    double stop = CONST_2PI;
+    double stop = M_PI_2;
     double step = 0.0000001;
     for (double i = start; i < stop; i += step)
     {
@@ -32,6 +32,20 @@ double accuracy(double (*func)(double))
         }
     }
     return w;
+}
+
+double accuracy_sin(double (*func)(double)) {
+  double w = -1;
+  double start = 0;
+  double stop = M_PI_2;
+  double step = 0.0000001;
+  for (double i = start; i < stop; i += step) {
+    double c = absd(func(i) - sin(i));
+    if (c > w) {
+      w = c;
+    }
+  }
+  return w;
 }
 
 #define RTEST(x)  { #x, x }
@@ -124,13 +138,25 @@ int main(int argc, char *argv[])
             printf("%-35s %.16lf\n", tests[i].name, accuracy(tests[i].func));
         }
     }
-    
+
+    printf("%-35s %.16lf\n", "fast_cosine", accuracy(fast_cosine));
+    printf("%-35s %.16lf\n", "fast_sine", accuracy_sin(fast_sine));
+    printf("%-35s %.16lf\n", "fast_arracy_cosine", accuracy(fast_arracy_cosine));
+    printf("%-35s %.16lf\n", "fast_arracy_sine", accuracy_sin(fast_arracy_sine));
+
+
     if (run_runtime) {
         printf("\nTIME\n");
         for (i = 0;i < num_tests;i++) {
             printf("%-35s %.16lf\n", tests[i].name, runtime(tests[i].func));
         }
     }
+
+    printf("%-35s %.16lf\n", "fast_cosine", runtime(fast_cosine));
+    printf("%-35s %.16lf\n", "fast_sine", runtime(fast_sine));
+    printf("%-35s %.16lf\n", "fast_arracy_cosine", runtime(fast_arracy_cosine));
+    printf("%-35s %.16lf\n", "fast_arracy_sine", runtime(fast_arracy_sine));
+
     printf("\n\nDone\n");
 
     return 0;

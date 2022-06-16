@@ -8,6 +8,7 @@
 #include "costable_0_01.h"
 #include "costable_0_001.h"
 #include "costable_0_0001.h"
+#include <math.h>
 
 #define CONST_PI  3.14159265358979323846264338327950288419716939937510
 #define CONST_2PI 6.28318530717958623199592693708837032318115234375000
@@ -310,3 +311,32 @@ double cos_table_0_0001_LERP(double x)
 double cos_math_h(double x) {
     return cos(x);
 }
+
+// cubic curve
+// input limit: -pi ~ pi
+double fast_arracy_sine(double x) {
+  double y = x * (1.273239545 + -0.405284735 * absd(x));
+  return y * (absd(y) * (0.0192 * absd(y) + 0.1951) + 0.7857);
+}
+
+// input limit: -pi-M_PI_2 ~ pi-M_PI_2
+double fast_arracy_cosine(double x) { return fast_arracy_sine(x + M_PI_2); }
+
+
+// quadratic curve
+#define EXTRA_PRECISION
+// -pi ~ pi
+double fast_sine(double x) {
+  const double B = 4 / M_PI;
+  const double C = -4 / (M_PI * M_PI);
+  double y = B * x + C * x * fabs(x);
+#ifdef EXTRA_PRECISION
+  //  const double Q = 0.775;
+  const double P = 0.225;
+  y = P * (y * fabs(y) - y) + y;  // Q * y + P * y * fabs(y), Q + P = 1
+#endif
+  return y;
+}
+
+// -pi-M_PI_2 ~ pi-M_PI_2
+double fast_cosine(double x) { return fast_sine(x + M_PI_2); }
