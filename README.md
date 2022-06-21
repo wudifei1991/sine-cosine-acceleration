@@ -60,8 +60,8 @@ cos_math_h
 ***NEW***
 fast_cosine
 fast_sine
-fast_arracy_cosine
-fast_arracy_sine 
+fast_acc_cosine
+fast_acc_sine 
 ***NEW***
 ```
 
@@ -109,9 +109,9 @@ cos_table_0_0001_LERP               0.0000000012500000
 cos_math_h                          0.0000000000000000
 fast_cosine                         0.0010902926026138
 fast_sine                           0.0010902926026137
-fast_arracy_cosine                  0.0000233416851561
-fast_arracy_cosine_v2               0.0000338486153860
-fast_arracy_sine                    0.0000233443382702
+fast_acc_cosine                  0.0000233416851561
+fast_acc_cosine_v2               0.0000338486153860
+fast_acc_sine                    0.0000233443382702
 
 TIME
 cos_taylor_literal_4terms_naive     0.2006480000000000
@@ -137,9 +137,9 @@ cos_table_0_0001_LERP               0.2466110000000000
 cos_math_h                          0.3569660000000000
 fast_cosine                         0.1416710000000000
 fast_sine                           0.1353450000000000
-fast_arracy_cosine                  0.1396380000000000
-fast_arracy_cosine_v2               0.1488490000000000
-fast_arracy_sine                    0.1312620000000000
+fast_acc_cosine                  0.1396380000000000
+fast_acc_cosine_v2               0.1488490000000000
+fast_acc_sine                    0.1312620000000000
 
 
 Done
@@ -173,8 +173,8 @@ cos_table_0_0001_LERP 0.0000000012500000
 cos_math_h 0.0000000000000000
 fast_cosine 0.0010902926026138
 fast_sine 0.0010902926026137
-fast_arracy_cosine 0.0000233416851561
-fast_arracy_sine 0.0000233443382702
+fast_acc_cosine 0.0000233416851561
+fast_acc_sine 0.0000233443382702
 
 
 
@@ -202,8 +202,8 @@ cos_table_0_0001_LERP 0.4529580000000000
 cos_math_h 0.9298620000000000
 fast_cosine 0.2139590000000000
 fast_sine 0.1922930000000000
-fast_arracy_cosine 0.2128010000000000
-fast_arracy_sine 0.1982350000000000
+fast_acc_cosine 0.2128010000000000
+fast_acc_sine 0.1982350000000000
 
 ```
 

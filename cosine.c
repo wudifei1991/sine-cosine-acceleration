@@ -314,16 +314,16 @@ double cos_math_h(double x) {
 
 // cubic curve
 // input limit: -pi ~ pi
-double fast_arracy_sine(double x) {
+double fast_acc_sine(double x) {
   double y = x * (1.273239545 + -0.405284735 * absd(x));
   return y * (absd(y) * (0.0192 * absd(y) + 0.1951) + 0.7857);
 }
 
 // input limit: -pi-M_PI_2 ~ pi-M_PI_2
-double fast_arracy_cosine(double x) { return fast_arracy_sine(x + M_PI_2); }
+double fast_acc_cosine(double x) { return fast_acc_sine(x + M_PI_2); }
 
 // input limit: -pi ~ pi
-double fast_arracy_cosine_v2(double x) {
+double fast_acc_cosine_v2(double x) {
   x = absd(x);
   double y = x * (0.636619772 + -0.101321184 * x);
   double y1 = y * (y * (0.0192 * y + 0.1951) + 0.7857);
