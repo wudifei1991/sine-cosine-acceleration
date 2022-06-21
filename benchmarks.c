@@ -142,6 +142,7 @@ int main(int argc, char *argv[])
     printf("%-35s %.16lf\n", "fast_cosine", accuracy(fast_cosine));
     printf("%-35s %.16lf\n", "fast_sine", accuracy_sin(fast_sine));
     printf("%-35s %.16lf\n", "fast_arracy_cosine", accuracy(fast_arracy_cosine));
+    printf("%-35s %.16lf\n", "fast_arracy_cosine_v2", accuracy(fast_arracy_cosine_v2));
     printf("%-35s %.16lf\n", "fast_arracy_sine", accuracy_sin(fast_arracy_sine));
 
 
@@ -155,6 +156,7 @@ int main(int argc, char *argv[])
     printf("%-35s %.16lf\n", "fast_cosine", runtime(fast_cosine));
     printf("%-35s %.16lf\n", "fast_sine", runtime(fast_sine));
     printf("%-35s %.16lf\n", "fast_arracy_cosine", runtime(fast_arracy_cosine));
+    printf("%-35s %.16lf\n", "fast_arracy_cosine_v2", runtime(fast_arracy_cosine_v2));
     printf("%-35s %.16lf\n", "fast_arracy_sine", runtime(fast_arracy_sine));
 
     printf("\n\nDone\n");

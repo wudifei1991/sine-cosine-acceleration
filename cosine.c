@@ -322,6 +322,14 @@ double fast_arracy_sine(double x) {
 // input limit: -pi-M_PI_2 ~ pi-M_PI_2
 double fast_arracy_cosine(double x) { return fast_arracy_sine(x + M_PI_2); }
 
+// input limit: -pi ~ pi
+double fast_arracy_cosine_v2(double x) {
+  x = absd(x);
+  double y = x * (0.636619772 + -0.101321184 * x);
+  double y1 = y * (y * (0.0192 * y + 0.1951) + 0.7857);
+  return 1.0 - 2. * y1 * y1;
+}
+
 
 // quadratic curve
 #define EXTRA_PRECISION
