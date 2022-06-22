@@ -326,10 +326,9 @@ double fast_acc_cosine(double x) { return fast_acc_sine(x + M_PI_2); }
 double fast_acc_cosine_v2(double x) {
   x = absd(x);
   double y = x * (0.636619772 + -0.101321184 * x);
-  double y1 = y * (y * (0.0192 * y + 0.1951) + 0.7857);
-  return 1.0 - 2. * y1 * y1;
+  double y1 = y * (y * (0.0271529 * y + 0.275913066) + 1.111147596);
+  return 1.0 - y1 * y1;
 }
-
 
 // quadratic curve
 #define EXTRA_PRECISION

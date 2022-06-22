@@ -82,7 +82,7 @@ Or run all tests with no arguments.
 
 ```
 clang -O3 -mavx benchmarks.c -o benchmarks -lm
-./benchmarks                        
+./benchmarks 
 Cosine benchmark
 
 ACCURACY
@@ -109,37 +109,37 @@ cos_table_0_0001_LERP               0.0000000012500000
 cos_math_h                          0.0000000000000000
 fast_cosine                         0.0010902926026138
 fast_sine                           0.0010902926026137
-fast_acc_cosine                  0.0000233416851561
-fast_acc_cosine_v2               0.0000338486153860
-fast_acc_sine                    0.0000233443382702
+fast_acc_cosine                     0.0000233416851561
+fast_acc_cosine_v2                  0.0000338483237610
+fast_acc_sine                       0.0000233443382702
 
 TIME
-cos_taylor_literal_4terms_naive     0.2006480000000000
-cos_taylor_literal_6terms_naive     0.3015650000000000
-cos_taylor_literal_6terms_2pi       0.4629260000000000
-cos_taylor_literal_6terms_pi        0.5711940000000000
-cos_taylor_literal_6terms           0.4606070000000000
-cos_taylor_literal_10terms          0.7248470000000000
-cos_taylor_running_6terms           0.4103160000000000
-cos_taylor_running_8terms           0.5273930000000000
-cos_taylor_running_10terms          0.6415490000000000
-cos_taylor_running_16terms          1.0646249999999999
-cos_table_1                         0.1761700000000000
-cos_table_0_1                       0.1847380000000000
-cos_table_0_01                      0.1874380000000000
-cos_table_0_001                     0.1876330000000000
-cos_table_0_0001                    0.1888590000000000
-cos_table_1_LERP                    0.2331610000000000
-cos_table_0_1_LERP                  0.2458810000000000
-cos_table_0_01_LERP                 0.2488140000000000
-cos_table_0_001_LERP                0.2466950000000000
-cos_table_0_0001_LERP               0.2466110000000000
-cos_math_h                          0.3569660000000000
-fast_cosine                         0.1416710000000000
-fast_sine                           0.1353450000000000
-fast_acc_cosine                  0.1396380000000000
-fast_acc_cosine_v2               0.1488490000000000
-fast_acc_sine                    0.1312620000000000
+cos_taylor_literal_4terms_naive     0.1994540000000000
+cos_taylor_literal_6terms_naive     0.3009390000000000
+cos_taylor_literal_6terms_2pi       0.4623580000000000
+cos_taylor_literal_6terms_pi        0.5693270000000000
+cos_taylor_literal_6terms           0.4597660000000000
+cos_taylor_literal_10terms          0.7167900000000000
+cos_taylor_running_6terms           0.4068400000000000
+cos_taylor_running_8terms           0.5226680000000000
+cos_taylor_running_10terms          0.6387990000000000
+cos_taylor_running_16terms          1.0606310000000001
+cos_table_1                         0.1742500000000000
+cos_table_0_1                       0.1843980000000000
+cos_table_0_01                      0.1873230000000000
+cos_table_0_001                     0.1868730000000000
+cos_table_0_0001                    0.1880180000000000
+cos_table_1_LERP                    0.2319910000000000
+cos_table_0_1_LERP                  0.2450100000000000
+cos_table_0_01_LERP                 0.2470970000000000
+cos_table_0_001_LERP                0.2528150000000000
+cos_table_0_0001_LERP               0.2469320000000000
+cos_math_h                          0.3528410000000000
+fast_cosine                         0.1374690000000000
+fast_sine                           0.1332670000000000
+fast_acc_cosine                     0.1389720000000000
+fast_acc_cosine_v2                  0.1383920000000000
+fast_acc_sine                       0.1289920000000000
 
 
 Done
