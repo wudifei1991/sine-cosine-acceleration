@@ -11,11 +11,13 @@ See the explanation and benchmarks at [http://austinhenley.com/blog/cosine.html]
 ```
 clang -O3 -mavx benchmarks.c -o benchmarks -lm
 ./benchmarks -h
-Usage: ./benchmarks [-na] [-nt] [-t <testname>]
+Usage: ./benchmarks [-na] [-nt] [-cos] [-asin] [-table] [-l <loop times>]
    -na - Don't run accuracy tests
    -nt - Don't run speed tests.
-   -t <testname> - Run a particular test instead of all tests.
-   -p - Print all test names.
+   -cos - Run cos test.
+   -asin - Run asin test.
+   -table - enable lut functions.
+   -l <loop time> - Runtime loop times.
 ```
 
 # TESTS
@@ -65,18 +67,7 @@ fast_acc_sine
 ***NEW***
 ```
 
-You can run a particular test by using the `-t` switch:
-
-```
-./benchmarks -t cos_table_1_LERP
-ACCURACY
-cos_table_1_LERP                    0.1147496616359112
-
-TIME
-cos_table_1_LERP                    1.3534999999999999
-```
-
-Or run all tests with no arguments.
+run all tests with no arguments.
 
 1. macos arm64
 

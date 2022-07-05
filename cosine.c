@@ -9,14 +9,7 @@
 #include "costable_0_001.h"
 #include "costable_0_0001.h"
 #include <math.h>
-
-#define CONST_PI  3.14159265358979323846264338327950288419716939937510
-#define CONST_2PI 6.28318530717958623199592693708837032318115234375000
-
-#define modd(x, y) ((x) - (int)((x) / (y)) * (y))
-#define lerp(w, v1, v2) ((1.0 - (w)) * (v1) + (w) * (v2))
-
-double absd(double a) { *((unsigned long *)&a) &= ~(1UL << 63); return a; }
+#include "define.h"
 
 //
 // Naive Taylor series functions.
@@ -320,7 +313,7 @@ double fast_acc_sine(double x) {
 }
 
 // input limit: -pi-M_PI_2 ~ pi-M_PI_2
-double fast_acc_cosine(double x) { return fast_acc_sine(x + M_PI_2); }
+double fast_acc_cosine(double x) { return fast_acc_sine(x + CONST_PI_2); }
 
 // input limit: -pi ~ pi
 double fast_acc_cosine_v2(double x) {
@@ -334,8 +327,8 @@ double fast_acc_cosine_v2(double x) {
 #define EXTRA_PRECISION
 // -pi ~ pi
 double fast_sine(double x) {
-  const double B = 4 / M_PI;
-  const double C = -4 / (M_PI * M_PI);
+  const double B = 4 / CONST_PI;
+  const double C = -4 / (CONST_PI * CONST_PI);
   double y = B * x + C * x * fabs(x);
 #ifdef EXTRA_PRECISION
   //  const double Q = 0.775;
@@ -346,4 +339,4 @@ double fast_sine(double x) {
 }
 
 // -pi-M_PI_2 ~ pi-M_PI_2
-double fast_cosine(double x) { return fast_sine(x + M_PI_2); }
+double fast_cosine(double x) { return fast_sine(x + CONST_PI_2); }
