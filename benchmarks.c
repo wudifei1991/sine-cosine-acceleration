@@ -3,9 +3,13 @@
 #include <time.h>
 #include <math.h>
 #include <string.h>
+#include "define.h"
+#ifdef x86
 #include "malloc.h"
+#endif
 #include "cosine.c"
 #include "asin.c"
+#include "atan2.c"
 
 // Measures the time of many executions in seconds. Smaller number is better.
 double runtime(double (*func)(double))
@@ -48,6 +52,43 @@ double runtime_asin(double (*func)(double))
     }
     double res = (clock() - start) / (double)CLOCKS_PER_SEC;
     free(data);
+    return res;
+}
+
+double runtime_atan2(double (*func)(double, double)) {
+    double sp = 0;
+    double ep = CONST_2PI;
+    double step = 0.0001;
+    unsigned long size = (ep - sp) / step + 1;
+    double *data_x = (double *)malloc(size * sizeof(double));
+    double *data_y = (double *)malloc(size * sizeof(double));
+    unsigned long count;
+    double angle;
+    for (count = 0; count < size; ++count)
+    {
+        angle = count * step + sp;
+        if (angle > ep)
+        {
+            break;
+        }
+        data_x[count] = cos(angle);
+        data_y[count] = cos(angle);
+        
+    }
+    size = count;
+    int loop = 100000000 / size + 1;
+    clock_t start = clock();
+    for (int i = 0; i < loop; i++)
+    {
+        for (int j = 0; j < size; ++j)
+        {
+            volatile double c = func(data_y[j], data_x[j]);
+            (void)c;
+        }
+    }
+    double res = (clock() - start) / (double)CLOCKS_PER_SEC;
+    free(data_x);
+    free(data_y);
     return res;
 }
 
@@ -103,6 +144,23 @@ double accuracy_asin(double (*func)(double))
     return w;
 }
 
+double accuracy_atan2(double (*func)(double, double)) {
+    double w = 0.;
+    double sp = 0.;
+    double step = 0.0000001;
+    double ep = CONST_2PI - step;
+    double x, y;
+    for (double i = 0; i < ep; i += step) {
+        x = cos(i);
+        y = sin(i);
+        double c = absd(func(y, x) - atan2(y, x));
+        if (c > w) {
+            w = c;
+        }
+    }
+    return w;
+}
+
 #define RTEST(x) \
     {            \
 #x, x    \
@@ -152,8 +210,20 @@ static struct
       /* Built-in arcsine */
       RTEST(asin_math_h)};
 
+static struct
+{
+    char name[35];
+    double (*func)(double y, double x);
+} tests_atan2[] = {
+    RTEST(nvd_atan2),
+    RTEST(fast_atan2),
+    RTEST(fast_acc_atan2),
+    RTEST(atan2_math_h)
+};
+
 const int num_tests = sizeof(tests) / sizeof(*tests);
 const int num_tests_asin = sizeof(tests_asin) / sizeof(*tests_asin);
+const int num_tests_atan2 = sizeof(tests_atan2) / sizeof(*tests_atan2);
 
 // Benchmarks the accuracy and time for all of our cosine implementations.
 int main(int argc, char *argv[])
@@ -161,6 +231,7 @@ int main(int argc, char *argv[])
 
     int run_cos = 0;
     int run_asin = 0;
+    int run_atan2 = 0;
     int run_accuracy = 1;
     int run_runtime = 1;
     int loop = 30;
@@ -177,6 +248,10 @@ int main(int argc, char *argv[])
         else if (!strcmp(argv[i], "-asin"))
         {
             run_asin = 1;
+        }
+        else if (!strcmp(argv[i], "-atan2"))
+        {
+            run_atan2 = 1;
         }
         else if (!strcmp(argv[i], "-na"))
         {
@@ -199,6 +274,12 @@ int main(int argc, char *argv[])
             printf("Usage: %s [-na] [-nt] [-cos] [-asin] [-table] [-l <loop times>]\n   -na - Don't run accuracy tests\n   -nt - Don't run speed tests.\n   -cos - Run cos test.\n   -asin - Run asin test.\n   -table - enable lut functions.\n   -l <loop time> - Runtime loop times.\n", argv[0]);
             return 0;
         }
+    }
+
+    if (!run_cos && !run_asin && !run_atan2) {
+        run_cos = 1;
+        run_asin = 1;
+        run_atan2 = 1;
     }
 
     if (run_cos)
@@ -301,6 +382,66 @@ int main(int argc, char *argv[])
                 printf("%-35s %.18lf\n", tests_asin[i].name, ct_sum_list[i] * inv_loop);
             }
         }
+    }
+
+    if (run_atan2) {
+        printf("ArcTan2 benchmark\n\n");
+        if (run_accuracy) {
+            printf("ACCURACY\n");
+            for (i = 0; i < num_tests_atan2; i++)
+            {
+                if (disable_table && strstr(tests_atan2[i].name, "table")) {
+                    continue;
+                }
+                printf("%-35s %.16lf\n", tests_atan2[i].name, accuracy_atan2(tests_atan2[i].func));
+            }
+        }
+        if (run_runtime)
+        {
+            printf("\nTIME\n");
+            for (i = 0; i < num_tests_atan2 - 1; i++)
+            {
+                if (disable_table && strstr(tests_atan2[i].name, "table")) {
+                    continue;
+                }
+                printf("%-20s,", tests_atan2[i].name);
+            }
+            printf("%-20s\n", tests_atan2[num_tests_atan2 - 1].name);
+            double ct_sum_list[num_tests_atan2];
+            for (i = 0; i < num_tests_atan2; i++)
+            {
+                ct_sum_list[i] = 0.;
+            }
+            int count = 0;
+            while (count++ < loop)
+            {
+                double ct_tmp;
+                for (i = 0; i < num_tests_atan2 - 1; i++)
+                {
+                    if (disable_table && strstr(tests_atan2[i].name, "table")) {
+                        continue;
+                    }
+                    ct_tmp = runtime_atan2(tests_atan2[i].func);
+                    ct_sum_list[i] += ct_tmp;
+                    printf("%.18lf,", ct_tmp);
+                }
+                ct_tmp = runtime_atan2(tests_atan2[num_tests_atan2 - 1].func);
+                ct_sum_list[num_tests_atan2 - 1] += ct_tmp;
+                printf("%.18lf\n", ct_tmp);
+            }
+
+            printf("\nAERAGE TIME\n");
+
+            double inv_loop = 1.0 / loop;
+            for (i = 0; i < num_tests_atan2; i++)
+            {
+                if (disable_table && strstr(tests_atan2[i].name, "table")) {
+                    continue;
+                }
+                printf("%-35s %.18lf\n", tests_atan2[i].name, ct_sum_list[i] * inv_loop);
+            }
+        }
+
     }
 
     printf("\n\nDone\n");

@@ -1,12 +1,18 @@
 #ifndef DEFINE_H
 #define DEFINE_H
  
+#define x86
+
 #define CONST_PI  3.14159265358979323846264338327950288419716939937510
 #define CONST_2PI 6.28318530717958623199592693708837032318115234375000
 #define CONST_PI_2  1.570796327
 
+#define D2R 0.017453293
+
 #define modd(x, y) ((x) - (int)((x) / (y)) * (y))
 #define lerp(w, v1, v2) ((1.0 - (w)) * (v1) + (w) * (v2))
+#define max(x, y) ((x) > (y) ? (x) : (y))
+#define min(x, y) ((x) < (y) ? (x) : (y))
 
 static inline double absd(double a) { *((unsigned long *)&a) &= ~(1UL << 63); return a; }
 
