@@ -7,6 +7,10 @@
 #define CONST_2PI 6.28318530717958623199592693708837032318115234375000
 #define CONST_PI_2  1.570796327
 
+#define CONST_PI_F  3.14159265F
+#define CONST_2PI_F 6.28318531F
+#define CONST_PI_2_F  1.57079633F
+
 #define D2R 0.017453293
 
 #define modd(x, y) ((x) - (int)((x) / (y)) * (y))

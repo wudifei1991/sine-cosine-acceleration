@@ -18,6 +18,9 @@ Usage: ./benchmarks [-na] [-nt] [-cos] [-asin] [-table] [-l <loop times>]
    -asin - Run asin test.
    -table - enable lut functions.
    -l <loop time> - Runtime loop times.
+
+g++-7 benchmarks.c -o benchmarks -g
+to build the debug version
 ```
 
 # TESTS

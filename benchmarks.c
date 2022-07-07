@@ -10,6 +10,7 @@
 #include "cosine.c"
 #include "asin.c"
 #include "atan2.c"
+#include "spheric_rigid_transform.c"
 
 // Measures the time of many executions in seconds. Smaller number is better.
 double runtime(double (*func)(double))
@@ -221,9 +222,28 @@ static struct
     RTEST(atan2_math_h)
 };
 
+static struct
+{
+    char name[35];
+    void (*func)(float *, float *, float *, unsigned long);
+} tests_rigid_transform_runtime[] = {
+    RTEST(fast_rigid_transform),
+    RTEST(rigid_transform)
+};
+
+static struct
+{
+    char name[35];
+    void (*func)(float *, float *, float *, unsigned long, float *);
+} tests_rigid_transform_accuracy[] = {
+    RTEST(fast_rigid_transform2)
+};
+
 const int num_tests = sizeof(tests) / sizeof(*tests);
 const int num_tests_asin = sizeof(tests_asin) / sizeof(*tests_asin);
 const int num_tests_atan2 = sizeof(tests_atan2) / sizeof(*tests_atan2);
+const int num_tests_rigid_transform_runtime = sizeof(tests_rigid_transform_runtime) / sizeof(*tests_rigid_transform_runtime);
+const int num_tests_rigid_transform_accuracy = sizeof(tests_rigid_transform_accuracy) / sizeof(*tests_rigid_transform_accuracy);
 
 // Benchmarks the accuracy and time for all of our cosine implementations.
 int main(int argc, char *argv[])
@@ -232,6 +252,7 @@ int main(int argc, char *argv[])
     int run_cos = 0;
     int run_asin = 0;
     int run_atan2 = 0;
+    int run_rigid_transform = 0;
     int run_accuracy = 1;
     int run_runtime = 1;
     int loop = 30;
@@ -252,6 +273,10 @@ int main(int argc, char *argv[])
         else if (!strcmp(argv[i], "-atan2"))
         {
             run_atan2 = 1;
+        }
+        else if (!strcmp(argv[i], "-rt"))
+        {
+            run_rigid_transform = 1;
         }
         else if (!strcmp(argv[i], "-na"))
         {
@@ -276,10 +301,11 @@ int main(int argc, char *argv[])
         }
     }
 
-    if (!run_cos && !run_asin && !run_atan2) {
+    if (!run_cos && !run_asin && !run_atan2 && !run_rigid_transform) {
         run_cos = 1;
         run_asin = 1;
         run_atan2 = 1;
+        run_rigid_transform = 1;
     }
 
     if (run_cos)
@@ -442,6 +468,64 @@ int main(int argc, char *argv[])
             }
         }
 
+    }
+
+    if (run_rigid_transform) {
+        printf("Spheric Rigid Transform benchmark\n\n");
+        float w = 0.;
+        for (float i = -1; i < 1; i+=0.001) {
+            float c = absf(asinf(i) - f_asinf(i));
+            if (c > w) {
+                w = c;
+            }
+        }
+        printf("sin err: %f\n", w);
+
+        if (run_accuracy) {
+            printf("ACCURACY\n");
+            for (i = 0; i < num_tests_rigid_transform_accuracy; i++)
+            {
+                printf("%-35s %.16lf\n", tests_rigid_transform_accuracy[i].name, accuracy_rigid_transform(tests_rigid_transform_accuracy[i].func));
+            }
+        }
+
+        if (run_runtime) {
+            printf("\nTIME\n");
+            for (i = 0; i < num_tests_rigid_transform_runtime - 1; i++)
+            {
+                printf("%-20s,", tests_rigid_transform_runtime[i].name);
+            }
+            printf("%-20s\n", tests_rigid_transform_runtime[num_tests_rigid_transform_runtime - 1].name);
+            double ct_sum_list[num_tests_rigid_transform_runtime];
+            for (i = 0; i < num_tests_rigid_transform_runtime; i++)
+            {
+                ct_sum_list[i] = 0.;
+            }
+            int count = 0;
+            while (count++ < loop)
+            {
+                double ct_tmp;
+                for (i = 0; i < num_tests_rigid_transform_runtime - 1; i++)
+                {
+                    ct_tmp = runtime_rigid_transform(tests_rigid_transform_runtime[i].func);
+                    ct_sum_list[i] += ct_tmp;
+                    printf("%.18lf,", ct_tmp);
+                }
+                ct_tmp = runtime_rigid_transform(tests_rigid_transform_runtime[num_tests_rigid_transform_runtime - 1].func);
+                ct_sum_list[num_tests_rigid_transform_runtime - 1] += ct_tmp;
+                printf("%.18lf\n", ct_tmp);
+            }
+
+            printf("\nAERAGE TIME\n");
+
+            double inv_loop = 1.0 / loop;
+            for (i = 0; i < num_tests_rigid_transform_runtime; i++)
+            {
+                printf("%-35s %.18lf\n", tests_rigid_transform_runtime[i].name, ct_sum_list[i] * inv_loop);
+            }
+        }
+
+        
     }
 
     printf("\n\nDone\n");
