@@ -56,7 +56,8 @@ double runtime_asin(double (*func)(double))
     return res;
 }
 
-double runtime_atan2(double (*func)(double, double)) {
+double runtime_atan2(double (*func)(double, double))
+{
     double sp = 0;
     double ep = CONST_2PI;
     double step = 0.0001;
@@ -73,8 +74,7 @@ double runtime_atan2(double (*func)(double, double)) {
             break;
         }
         data_x[count] = cos(angle);
-        data_y[count] = cos(angle);
-        
+        data_y[count] = sin(angle);
     }
     size = count;
     int loop = 100000000 / size + 1;
@@ -145,17 +145,20 @@ double accuracy_asin(double (*func)(double))
     return w;
 }
 
-double accuracy_atan2(double (*func)(double, double)) {
+double accuracy_atan2(double (*func)(double, double))
+{
     double w = 0.;
     double sp = 0.;
     double step = 0.0000001;
     double ep = CONST_2PI - step;
     double x, y;
-    for (double i = 0; i < ep; i += step) {
+    for (double i = 0; i < ep; i += step)
+    {
         x = cos(i);
         y = sin(i);
         double c = absd(func(y, x) - atan2(y, x));
-        if (c > w) {
+        if (c > w)
+        {
             w = c;
         }
     }
@@ -219,8 +222,7 @@ static struct
     RTEST(nvd_atan2),
     RTEST(fast_atan2),
     RTEST(fast_acc_atan2),
-    RTEST(atan2_math_h)
-};
+    RTEST(atan2_math_h)};
 
 static struct
 {
@@ -228,16 +230,14 @@ static struct
     void (*func)(float *, float *, float *, unsigned long);
 } tests_rigid_transform_runtime[] = {
     RTEST(fast_rigid_transform),
-    RTEST(rigid_transform)
-};
+    RTEST(rigid_transform)};
 
 static struct
 {
     char name[35];
     void (*func)(float *, float *, float *, unsigned long, float *);
 } tests_rigid_transform_accuracy[] = {
-    RTEST(fast_rigid_transform2)
-};
+    RTEST(fast_rigid_transform2)};
 
 const int num_tests = sizeof(tests) / sizeof(*tests);
 const int num_tests_asin = sizeof(tests_asin) / sizeof(*tests_asin);
@@ -248,7 +248,6 @@ const int num_tests_rigid_transform_accuracy = sizeof(tests_rigid_transform_accu
 // Benchmarks the accuracy and time for all of our cosine implementations.
 int main(int argc, char *argv[])
 {
-
     int run_cos = 0;
     int run_asin = 0;
     int run_atan2 = 0;
@@ -291,7 +290,8 @@ int main(int argc, char *argv[])
             i++;
             loop = atoi(argv[i]);
         }
-        else if (!strcmp(argv[i], "-table")) {
+        else if (!strcmp(argv[i], "-table"))
+        {
             disable_table = 0;
         }
         else
@@ -299,13 +299,6 @@ int main(int argc, char *argv[])
             printf("Usage: %s [-na] [-nt] [-cos] [-asin] [-table] [-l <loop times>]\n   -na - Don't run accuracy tests\n   -nt - Don't run speed tests.\n   -cos - Run cos test.\n   -asin - Run asin test.\n   -table - enable lut functions.\n   -l <loop time> - Runtime loop times.\n", argv[0]);
             return 0;
         }
-    }
-
-    if (!run_cos && !run_asin && !run_atan2 && !run_rigid_transform) {
-        run_cos = 1;
-        run_asin = 1;
-        run_atan2 = 1;
-        run_rigid_transform = 1;
     }
 
     if (run_cos)
@@ -316,7 +309,8 @@ int main(int argc, char *argv[])
             printf("ACCURACY\n");
             for (i = 0; i < num_tests; i++)
             {
-                if (disable_table && strstr(tests[i].name, "table")) {
+                if (disable_table && strstr(tests[i].name, "table"))
+                {
                     continue;
                 }
                 printf("%-35s %.16lf\n", tests[i].name, accuracy(tests[i].func));
@@ -334,7 +328,8 @@ int main(int argc, char *argv[])
             printf("\nTIME\n");
             for (i = 0; i < num_tests; i++)
             {
-                if (disable_table && strstr(tests[i].name, "table")) {
+                if (disable_table && strstr(tests[i].name, "table"))
+                {
                     continue;
                 }
                 printf("%-35s %.16lf\n", tests[i].name, runtime(tests[i].func));
@@ -356,7 +351,8 @@ int main(int argc, char *argv[])
             printf("ACCURACY\n");
             for (i = 0; i < num_tests_asin; i++)
             {
-                if (disable_table && strstr(tests_asin[i].name, "table")) {
+                if (disable_table && strstr(tests_asin[i].name, "table"))
+                {
                     continue;
                 }
                 printf("%-35s %.16lf\n", tests_asin[i].name, accuracy_asin(tests_asin[i].func));
@@ -368,7 +364,8 @@ int main(int argc, char *argv[])
             printf("\nTIME\n");
             for (i = 0; i < num_tests_asin - 1; i++)
             {
-                if (disable_table && strstr(tests_asin[i].name, "table")) {
+                if (disable_table && strstr(tests_asin[i].name, "table"))
+                {
                     continue;
                 }
                 printf("%-20s,", tests_asin[i].name);
@@ -385,7 +382,8 @@ int main(int argc, char *argv[])
                 double ct_tmp;
                 for (i = 0; i < num_tests_asin - 1; i++)
                 {
-                    if (disable_table && strstr(tests_asin[i].name, "table")) {
+                    if (disable_table && strstr(tests_asin[i].name, "table"))
+                    {
                         continue;
                     }
                     ct_tmp = runtime_asin(tests_asin[i].func);
@@ -402,7 +400,8 @@ int main(int argc, char *argv[])
             double inv_loop = 1.0 / loop;
             for (i = 0; i < num_tests_asin; i++)
             {
-                if (disable_table && strstr(tests_asin[i].name, "table")) {
+                if (disable_table && strstr(tests_asin[i].name, "table"))
+                {
                     continue;
                 }
                 printf("%-35s %.18lf\n", tests_asin[i].name, ct_sum_list[i] * inv_loop);
@@ -410,13 +409,16 @@ int main(int argc, char *argv[])
         }
     }
 
-    if (run_atan2) {
+    if (run_atan2)
+    {
         printf("ArcTan2 benchmark\n\n");
-        if (run_accuracy) {
+        if (run_accuracy)
+        {
             printf("ACCURACY\n");
             for (i = 0; i < num_tests_atan2; i++)
             {
-                if (disable_table && strstr(tests_atan2[i].name, "table")) {
+                if (disable_table && strstr(tests_atan2[i].name, "table"))
+                {
                     continue;
                 }
                 printf("%-35s %.16lf\n", tests_atan2[i].name, accuracy_atan2(tests_atan2[i].func));
@@ -427,7 +429,8 @@ int main(int argc, char *argv[])
             printf("\nTIME\n");
             for (i = 0; i < num_tests_atan2 - 1; i++)
             {
-                if (disable_table && strstr(tests_atan2[i].name, "table")) {
+                if (disable_table && strstr(tests_atan2[i].name, "table"))
+                {
                     continue;
                 }
                 printf("%-20s,", tests_atan2[i].name);
@@ -444,7 +447,8 @@ int main(int argc, char *argv[])
                 double ct_tmp;
                 for (i = 0; i < num_tests_atan2 - 1; i++)
                 {
-                    if (disable_table && strstr(tests_atan2[i].name, "table")) {
+                    if (disable_table && strstr(tests_atan2[i].name, "table"))
+                    {
                         continue;
                     }
                     ct_tmp = runtime_atan2(tests_atan2[i].func);
@@ -461,27 +465,31 @@ int main(int argc, char *argv[])
             double inv_loop = 1.0 / loop;
             for (i = 0; i < num_tests_atan2; i++)
             {
-                if (disable_table && strstr(tests_atan2[i].name, "table")) {
+                if (disable_table && strstr(tests_atan2[i].name, "table"))
+                {
                     continue;
                 }
                 printf("%-35s %.18lf\n", tests_atan2[i].name, ct_sum_list[i] * inv_loop);
             }
         }
-
     }
 
-    if (run_rigid_transform) {
+    if (run_rigid_transform)
+    {
         printf("Spheric Rigid Transform benchmark\n\n");
         float w = 0.;
-        for (float i = -1; i < 1; i+=0.001) {
+        for (float i = -1; i < 1; i += 0.001)
+        {
             float c = absf(asinf(i) - f_asinf(i));
-            if (c > w) {
+            if (c > w)
+            {
                 w = c;
             }
         }
         printf("sin err: %f\n", w);
 
-        if (run_accuracy) {
+        if (run_accuracy)
+        {
             printf("ACCURACY\n");
             for (i = 0; i < num_tests_rigid_transform_accuracy; i++)
             {
@@ -489,7 +497,8 @@ int main(int argc, char *argv[])
             }
         }
 
-        if (run_runtime) {
+        if (run_runtime)
+        {
             printf("\nTIME\n");
             for (i = 0; i < num_tests_rigid_transform_runtime - 1; i++)
             {
@@ -524,8 +533,6 @@ int main(int argc, char *argv[])
                 printf("%-35s %.18lf\n", tests_rigid_transform_runtime[i].name, ct_sum_list[i] * inv_loop);
             }
         }
-
-        
     }
 
     printf("\n\nDone\n");

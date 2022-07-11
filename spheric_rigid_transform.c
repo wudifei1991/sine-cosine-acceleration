@@ -322,6 +322,7 @@ void rt_case(const float step, const float trans_r, float *r_list, float *t_list
             trans[2] = tyz * cosf(h_angle);
             memcpy(r_list + count * 9, rotate, 9 * sizeof(float));
             memcpy(t_list + count * 3, trans, 3 * sizeof(float));
+            count++;
           }
         }
       }
