@@ -19,6 +19,7 @@
 #define min(x, y) ((x) < (y) ? (x) : (y))
 
 static inline double absd(double a) { *((unsigned long *)&a) &= ~(1UL << 63); return a; }
+static inline float absf(float a) { *((unsigned int *)&a) &= ~(1UL << 31); return a; }
 
 // reference: https://en.wikipedia.org/wiki/Fast_inverse_square_root
 static inline double rsqrt(double x)

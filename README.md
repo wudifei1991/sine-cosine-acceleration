@@ -202,3 +202,12 @@ fast_acc_sine 0.1982350000000000
 ```
 
 Your results will differ.
+
+
+add sincos integer input test
+the relationship of the input integer  and the actual angle in redian is:
+   integer * Pi() / 8192 = angle
+
+use:
+   clang -o3 -mavx sincosi_benchmark.c -o sincosi -lm
+to build the sincosi
